@@ -1,0 +1,1620 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datapoc"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"POC_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'POC'"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/SP_ODS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SP_ODS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[SP_ODS]",
+							"storedProcedureParameters": {
+								"RUN_DATE": {
+									"value": {
+										"value": "@utcnow()",
+										"type": "Expression"
+									},
+									"type": "Datetime"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "POC",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "ODS"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-02-21T09:59:45Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/POC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SYNC_DIM_DATE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_1l7",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "datablob/Sour_File/DIM_DATE.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "dbo.DIM_DATE"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink"
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "DATE_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DATE_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "DATE_STR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DATE_STR",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "YEAR_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YEAR_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "YEAR_STR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YEAR_STR",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QUARTER_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QUARTER_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "QUARTER_STR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QUARTER_STR",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "MONTH_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MONTH_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "MONTH_STR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MONTH_STR",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ISWEEKEND",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ISWEEKEND",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ISHOLIDAY",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ISHOLIDAY",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ISEVENT",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ISEVENT",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "MONTH_EN",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MONTH_EN",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "WEEK_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "WEEK_ID",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "DAY_WEEK",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DAY_WEEK",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_1l7",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_1l7",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "ODS"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-02-21T09:06:21Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_1l7')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_1l7')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/job_cnsms_odsraw_ods_customerprofile')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_uu8",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "datablob/Landing Zone/CNSMS/CUSTOMERPROFILE.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "ods.cnsms_customerprofile"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink"
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CUSTOMERPROFILEID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "customerprofileid",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "CUSTOMERID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "customerid",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "CUSTTYPE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "custtype",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "STOREID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "storeid",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "CUSTCATEGORYTYPE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "custcategorytype",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "NAMECN",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "namecn",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NAMEEN",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "nameen",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "BIRTHDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "birthdate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "GENDER",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "gender",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "ISACTIVEIND",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "isactiveind",
+											"type": "Boolean",
+											"physicalType": "bit"
+										}
+									},
+									{
+										"source": {
+											"name": "SPOUSENAMECN",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "spousenamecn",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SPOUSENAMEEN",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "spousenameen",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "CONTACTBYEMAIL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "contactbyemail",
+											"type": "Boolean",
+											"physicalType": "bit"
+										}
+									},
+									{
+										"source": {
+											"name": "REFERRALID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "referralid",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "APPLICATIONNUMBER",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "applicationnumber",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "APPLICATIONDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "applicationdate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "RENEWDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "renewdate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "CREDITLIMIT",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "creditlimit",
+											"type": "Decimal",
+											"physicalType": "numeric"
+										}
+									},
+									{
+										"source": {
+											"name": "SUPQUALDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "supqualdate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "SUPREQUALDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "suprequaldate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "CNTRYPROCESS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "cntryprocess",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "PCAPPDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "pcappdate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "DSAPPDATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "dsappdate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "UPDATECOUNT",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "updatecount",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "CREATEDON",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "createdon",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "CREATEDBY",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "createdby",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "UPDATEDON",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "updatedon",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "UPDATEDBY",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "updatedby",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ISDELETED",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "isdeleted",
+											"type": "Boolean",
+											"physicalType": "bit"
+										}
+									},
+									{
+										"source": {
+											"name": "SPOUSENATIONALID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "spousenationalid",
+											"type": "String",
+											"physicalType": "char"
+										}
+									},
+									{
+										"source": {
+											"name": "CUSTOMERPROFILETS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "customerprofilets",
+											"type": "Byte[]",
+											"physicalType": "timestamp"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_uu8",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_uu8",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-02-24T02:54:00Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_uu8')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_uu8')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SqlServerTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-02-19T12:19:45Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "CUSTOMERPROFILE.csv",
+						"folderPath": "Landing Zone/CNSMS",
+						"container": "datablob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_1l7')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "POC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "DATE_ID",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "DATE_STR",
+						"type": "nvarchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "YEAR_ID",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "YEAR_STR",
+						"type": "nvarchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "QUARTER_ID",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "QUARTER_STR",
+						"type": "nvarchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MONTH_ID",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MONTH_STR",
+						"type": "nvarchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "ISWEEKEND",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "ISHOLIDAY",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "ISEVENT",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MONTH_EN",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "WEEK_ID",
+						"type": "int",
+						"precision": 10,
+						"scale": 0
+					},
+					{
+						"name": "DAY_WEEK",
+						"type": "int",
+						"precision": 10,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIM_DATE"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/POC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_uu8')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "POC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "customerprofileid",
+						"type": "bigint",
+						"precision": 19,
+						"scale": 0
+					},
+					{
+						"name": "customerid",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "custtype",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "storeid",
+						"type": "int",
+						"precision": 10,
+						"scale": 0
+					},
+					{
+						"name": "custcategorytype",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "namecn",
+						"type": "nvarchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "nameen",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "birthdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "gender",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "isactiveind",
+						"type": "bit",
+						"precision": 1,
+						"scale": 0
+					},
+					{
+						"name": "spousenamecn",
+						"type": "nvarchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "spousenameen",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "contactbyemail",
+						"type": "bit",
+						"precision": 1,
+						"scale": 0
+					},
+					{
+						"name": "referralid",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "applicationnumber",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "applicationdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "renewdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "creditlimit",
+						"type": "numeric",
+						"precision": 10,
+						"scale": 2
+					},
+					{
+						"name": "supqualdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "suprequaldate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "cntryprocess",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "pcappdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "dsappdate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "updatecount",
+						"type": "int",
+						"precision": 10,
+						"scale": 0
+					},
+					{
+						"name": "createdon",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "createdby",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "updatedon",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "updatedby",
+						"type": "varchar",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "isdeleted",
+						"type": "bit",
+						"precision": 1,
+						"scale": 0
+					},
+					{
+						"name": "spousenationalid",
+						"type": "char",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "customerprofilets",
+						"type": "timestamp",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "ods",
+					"table": "cnsms_customerprofile"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/POC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_1l7')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "DIM_DATE.csv",
+						"folderPath": "Sour_File",
+						"container": "datablob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "DATE_ID",
+						"type": "String"
+					},
+					{
+						"name": "DATE_STR",
+						"type": "String"
+					},
+					{
+						"name": "YEAR_ID",
+						"type": "String"
+					},
+					{
+						"name": "YEAR_STR",
+						"type": "String"
+					},
+					{
+						"name": "QUARTER_ID",
+						"type": "String"
+					},
+					{
+						"name": "QUARTER_STR",
+						"type": "String"
+					},
+					{
+						"name": "MONTH_ID",
+						"type": "String"
+					},
+					{
+						"name": "MONTH_STR",
+						"type": "String"
+					},
+					{
+						"name": "ISWEEKEND",
+						"type": "String"
+					},
+					{
+						"name": "ISHOLIDAY",
+						"type": "String"
+					},
+					{
+						"name": "ISEVENT",
+						"type": "String"
+					},
+					{
+						"name": "MONTH_EN",
+						"type": "String"
+					},
+					{
+						"name": "WEEK_ID",
+						"type": "String"
+					},
+					{
+						"name": "DAY_WEEK",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_uu8')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "CUSTOMERPROFILE.csv",
+						"folderPath": "Landing Zone/CNSMS",
+						"container": "datablob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CUSTOMERPROFILEID",
+						"type": "String"
+					},
+					{
+						"name": "CUSTOMERID",
+						"type": "String"
+					},
+					{
+						"name": "CUSTTYPE",
+						"type": "String"
+					},
+					{
+						"name": "STOREID",
+						"type": "String"
+					},
+					{
+						"name": "CUSTCATEGORYTYPE",
+						"type": "String"
+					},
+					{
+						"name": "NAMECN",
+						"type": "String"
+					},
+					{
+						"name": "NAMEEN",
+						"type": "String"
+					},
+					{
+						"name": "BIRTHDATE",
+						"type": "String"
+					},
+					{
+						"name": "GENDER",
+						"type": "String"
+					},
+					{
+						"name": "ISACTIVEIND",
+						"type": "String"
+					},
+					{
+						"name": "SPOUSENAMECN",
+						"type": "String"
+					},
+					{
+						"name": "SPOUSENAMEEN",
+						"type": "String"
+					},
+					{
+						"name": "CONTACTBYEMAIL",
+						"type": "String"
+					},
+					{
+						"name": "REFERRALID",
+						"type": "String"
+					},
+					{
+						"name": "APPLICATIONNUMBER",
+						"type": "String"
+					},
+					{
+						"name": "APPLICATIONDATE",
+						"type": "String"
+					},
+					{
+						"name": "RENEWDATE",
+						"type": "String"
+					},
+					{
+						"name": "CREDITLIMIT",
+						"type": "String"
+					},
+					{
+						"name": "SUPQUALDATE",
+						"type": "String"
+					},
+					{
+						"name": "SUPREQUALDATE",
+						"type": "String"
+					},
+					{
+						"name": "CNTRYPROCESS",
+						"type": "String"
+					},
+					{
+						"name": "PCAPPDATE",
+						"type": "String"
+					},
+					{
+						"name": "DSAPPDATE",
+						"type": "String"
+					},
+					{
+						"name": "UPDATECOUNT",
+						"type": "String"
+					},
+					{
+						"name": "CREATEDON",
+						"type": "String"
+					},
+					{
+						"name": "CREATEDBY",
+						"type": "String"
+					},
+					{
+						"name": "UPDATEDON",
+						"type": "String"
+					},
+					{
+						"name": "UPDATEDBY",
+						"type": "String"
+					},
+					{
+						"name": "ISDELETED",
+						"type": "String"
+					},
+					{
+						"name": "SPOUSENATIONALID",
+						"type": "String"
+					},
+					{
+						"name": "CUSTOMERPROFILETS",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "POC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "DATE_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "DATE_STR",
+						"type": "varchar"
+					},
+					{
+						"name": "YEAR_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "YEAR_STR",
+						"type": "varchar"
+					},
+					{
+						"name": "QUARTER_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "QUARTER_STR",
+						"type": "varchar"
+					},
+					{
+						"name": "MONTH_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "MONTH_STR",
+						"type": "varchar"
+					},
+					{
+						"name": "ISWEEKEND",
+						"type": "varchar"
+					},
+					{
+						"name": "ISHOLIDAY",
+						"type": "varchar"
+					},
+					{
+						"name": "ISEVENT",
+						"type": "varchar"
+					},
+					{
+						"name": "MONTH_EN",
+						"type": "varchar"
+					},
+					{
+						"name": "WEEK_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DAY_WEEK",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "DIM_DATE"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/POC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/POC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('POC_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
