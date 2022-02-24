@@ -196,8 +196,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "ods",
-			"table": "cnsms_customerprofile"
+			"schema": "dbo",
+			"table": "cnsms_customerprofile_test"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
