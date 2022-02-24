@@ -1,0 +1,9 @@
+{
+	"name": "datapoc",
+	"location": "chinanorth2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3e64bcc6-4916-40e7-8ecf-f436f9b6248a",
+		"tenantId": "0af2e661-5f7c-4d68-84b5-62e6c1181470"
+	}
+}

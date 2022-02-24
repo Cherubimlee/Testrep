@@ -1,0 +1,445 @@
+{
+	"name": "job_cnsms_odsraw_ods_customerprofile",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_uu8",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "datablob/Landing Zone/CNSMS/CUSTOMERPROFILE.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "ods.cnsms_customerprofile"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings",
+							"skipLineCount": 0
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink"
+					},
+					"enableStaging": false,
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CUSTOMERPROFILEID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "customerprofileid",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "CUSTOMERID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "customerid",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "CUSTTYPE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "custtype",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "STOREID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "storeid",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CUSTCATEGORYTYPE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "custcategorytype",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "NAMECN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "namecn",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "NAMEEN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "nameen",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "BIRTHDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "birthdate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "GENDER",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "gender",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "ISACTIVEIND",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "isactiveind",
+									"type": "Boolean",
+									"physicalType": "bit"
+								}
+							},
+							{
+								"source": {
+									"name": "SPOUSENAMECN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "spousenamecn",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SPOUSENAMEEN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "spousenameen",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "CONTACTBYEMAIL",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "contactbyemail",
+									"type": "Boolean",
+									"physicalType": "bit"
+								}
+							},
+							{
+								"source": {
+									"name": "REFERRALID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "referralid",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "APPLICATIONNUMBER",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "applicationnumber",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "APPLICATIONDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "applicationdate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "RENEWDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "renewdate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "CREDITLIMIT",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "creditlimit",
+									"type": "Decimal",
+									"physicalType": "numeric"
+								}
+							},
+							{
+								"source": {
+									"name": "SUPQUALDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "supqualdate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "SUPREQUALDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "suprequaldate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "CNTRYPROCESS",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cntryprocess",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "PCAPPDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "pcappdate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "DSAPPDATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "dsappdate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "UPDATECOUNT",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "updatecount",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "CREATEDON",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "createdon",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "CREATEDBY",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "createdby",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "UPDATEDON",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "updatedon",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "UPDATEDBY",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "updatedby",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ISDELETED",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "isdeleted",
+									"type": "Boolean",
+									"physicalType": "bit"
+								}
+							},
+							{
+								"source": {
+									"name": "SPOUSENATIONALID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "spousenationalid",
+									"type": "String",
+									"physicalType": "char"
+								}
+							},
+							{
+								"source": {
+									"name": "CUSTOMERPROFILETS",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "customerprofilets",
+									"type": "Byte[]",
+									"physicalType": "timestamp"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_uu8",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_uu8",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-02-24T02:54:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

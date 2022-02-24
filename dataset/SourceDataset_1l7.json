@@ -1,0 +1,82 @@
+{
+	"name": "SourceDataset_1l7",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "DIM_DATE.csv",
+				"folderPath": "Sour_File",
+				"container": "datablob"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "DATE_ID",
+				"type": "String"
+			},
+			{
+				"name": "DATE_STR",
+				"type": "String"
+			},
+			{
+				"name": "YEAR_ID",
+				"type": "String"
+			},
+			{
+				"name": "YEAR_STR",
+				"type": "String"
+			},
+			{
+				"name": "QUARTER_ID",
+				"type": "String"
+			},
+			{
+				"name": "QUARTER_STR",
+				"type": "String"
+			},
+			{
+				"name": "MONTH_ID",
+				"type": "String"
+			},
+			{
+				"name": "MONTH_STR",
+				"type": "String"
+			},
+			{
+				"name": "ISWEEKEND",
+				"type": "String"
+			},
+			{
+				"name": "ISHOLIDAY",
+				"type": "String"
+			},
+			{
+				"name": "ISEVENT",
+				"type": "String"
+			},
+			{
+				"name": "MONTH_EN",
+				"type": "String"
+			},
+			{
+				"name": "WEEK_ID",
+				"type": "String"
+			},
+			{
+				"name": "DAY_WEEK",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

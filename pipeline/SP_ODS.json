@@ -1,0 +1,42 @@
+{
+	"name": "SP_ODS",
+	"properties": {
+		"activities": [
+			{
+				"name": "SP_ODS",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[SP_ODS]",
+					"storedProcedureParameters": {
+						"RUN_DATE": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "Datetime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "POC",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "ODS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-02-21T09:59:45Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

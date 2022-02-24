@@ -1,0 +1,76 @@
+{
+	"name": "SqlServerTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "POC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "DATE_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "DATE_STR",
+				"type": "varchar"
+			},
+			{
+				"name": "YEAR_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "YEAR_STR",
+				"type": "varchar"
+			},
+			{
+				"name": "QUARTER_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "QUARTER_STR",
+				"type": "varchar"
+			},
+			{
+				"name": "MONTH_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "MONTH_STR",
+				"type": "varchar"
+			},
+			{
+				"name": "ISWEEKEND",
+				"type": "varchar"
+			},
+			{
+				"name": "ISHOLIDAY",
+				"type": "varchar"
+			},
+			{
+				"name": "ISEVENT",
+				"type": "varchar"
+			},
+			{
+				"name": "MONTH_EN",
+				"type": "varchar"
+			},
+			{
+				"name": "WEEK_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DAY_WEEK",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DIM_DATE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

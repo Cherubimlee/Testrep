@@ -1,0 +1,150 @@
+{
+	"name": "SourceDataset_uu8",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "CUSTOMERPROFILE.csv",
+				"folderPath": "Landing Zone/CNSMS",
+				"container": "datablob"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "CUSTOMERPROFILEID",
+				"type": "String"
+			},
+			{
+				"name": "CUSTOMERID",
+				"type": "String"
+			},
+			{
+				"name": "CUSTTYPE",
+				"type": "String"
+			},
+			{
+				"name": "STOREID",
+				"type": "String"
+			},
+			{
+				"name": "CUSTCATEGORYTYPE",
+				"type": "String"
+			},
+			{
+				"name": "NAMECN",
+				"type": "String"
+			},
+			{
+				"name": "NAMEEN",
+				"type": "String"
+			},
+			{
+				"name": "BIRTHDATE",
+				"type": "String"
+			},
+			{
+				"name": "GENDER",
+				"type": "String"
+			},
+			{
+				"name": "ISACTIVEIND",
+				"type": "String"
+			},
+			{
+				"name": "SPOUSENAMECN",
+				"type": "String"
+			},
+			{
+				"name": "SPOUSENAMEEN",
+				"type": "String"
+			},
+			{
+				"name": "CONTACTBYEMAIL",
+				"type": "String"
+			},
+			{
+				"name": "REFERRALID",
+				"type": "String"
+			},
+			{
+				"name": "APPLICATIONNUMBER",
+				"type": "String"
+			},
+			{
+				"name": "APPLICATIONDATE",
+				"type": "String"
+			},
+			{
+				"name": "RENEWDATE",
+				"type": "String"
+			},
+			{
+				"name": "CREDITLIMIT",
+				"type": "String"
+			},
+			{
+				"name": "SUPQUALDATE",
+				"type": "String"
+			},
+			{
+				"name": "SUPREQUALDATE",
+				"type": "String"
+			},
+			{
+				"name": "CNTRYPROCESS",
+				"type": "String"
+			},
+			{
+				"name": "PCAPPDATE",
+				"type": "String"
+			},
+			{
+				"name": "DSAPPDATE",
+				"type": "String"
+			},
+			{
+				"name": "UPDATECOUNT",
+				"type": "String"
+			},
+			{
+				"name": "CREATEDON",
+				"type": "String"
+			},
+			{
+				"name": "CREATEDBY",
+				"type": "String"
+			},
+			{
+				"name": "UPDATEDON",
+				"type": "String"
+			},
+			{
+				"name": "UPDATEDBY",
+				"type": "String"
+			},
+			{
+				"name": "ISDELETED",
+				"type": "String"
+			},
+			{
+				"name": "SPOUSENATIONALID",
+				"type": "String"
+			},
+			{
+				"name": "CUSTOMERPROFILETS",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
